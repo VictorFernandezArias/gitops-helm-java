@@ -1,0 +1,84 @@
+# Nombre de la aplicación, runtime (java, nodejs, wordpress) y la version del template
+name: porreg-servicio-docfirma
+namespace: dev-registro
+# runtime: java
+# version: 1.0
+# Definición de pods, recursos asignados,y variables de entorno de la aplicación
+deployment:
+  replicas: 1
+  resources: #{}
+   limits:
+     cpu: 150m
+     memory: 300Mi
+   requests:
+     cpu: 100m
+     memory: 200Mi
+  env: []
+  #  - name: TZ
+  #    value: America/Santiago
+  #  - name: SSO_URL
+  #    value: 'https://sso-noprod.xdsds.io/auth/realms/'
+
+# Definición de port de consumo de aplicación en service
+service:
+  - port: 8080
+    targetPort: 8080
+  - port: 8443
+    targetPort: 8443
+
+# Por defecto se crea la route con definición default de openshift, y este apartado permite Definir de route adicionales como por ejemplo DNS.
+route:
+  - host: dev-registro-clientes.cclh.io
+    port: 8080
+    targetPort: 8080
+    name: porreg-servicio-docfirma
+
+##------- INCORPORAR CERTIFICADOS TLS en ROUTES -------##
+
+# Definición de construcción de imagen con codigo fuente.
+buildConfig:
+  image: openjdk-11:1.18-2 ## validar si retirar y dejar en template  (openjdk-11:1.18-2 o openjdk-17:1.2)
+  gitUrl: https://sourcecode.xxxx.cl/scm/porreg/porreg-servicio-fis-docfirma-registro.git
+  ref: /
+  branch: hotfix/normalizacion-springboot-java
+  envSecret: bitbucket
+  enabled: true
+
+# Asignación de secrets globales de tipo environment a la aplicación
+secretGlobal: 
+  - "secret-001"
+#  name: bd-mongo
+#  name: bd-sql
+
+# Asignación de configmap globales de tipo environment a la aplicación
+configMapGlobal: #[]
+   - "cmname"
+   - "cmname-a"
+   - "cmname-b"
+#  - name: config-docfirma
+#  - name: config-fis-clientes
+
+# Asignación de configmap globales de tipo volumen a la aplicación
+volumeConfigMap: #[]
+  - name: globalconfigmap2
+    mountPath: /properties
+    configMap:
+      items:
+        - key: globalconfigmap2.properties
+          path: globalconfigmap2.properties
+
+  - name: globalconfigmap10
+    mountPath: /config
+    configMap:
+      items:
+        - key: globalconfigmap10.properties
+          path: globalconfigmap10.properties
+# volumeMounts:
+#   mountPath: /properties
+#   name: volume-cm
+#   configMap:
+#     defaultMode: 420
+#     items:
+#       key: globalconfigmap2.properties
+#       path: globalconfigmap2.properties
+#     name: globalconfigmap2

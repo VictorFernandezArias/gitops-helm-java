@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app:  {{ .Values.name }}
+    deployment: {{ .Values.name }}
+    #app.kubernetes.io/component: {{ .Values.name }}
+    #app.kubernetes.io/instance: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app:  {{ .Values.name }}
+      deployment: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app:  {{ .Values.name }}
+        deployment: {{ .Values.name }}
+    spec:
+      {{- if .Values.volumeConfigMap }}
+      volumes:
+        {{- range $cmvolume := .Values.volumeConfigMap }}
+        - configMap:
+            defaultMode: 420
+            {{- toYaml $cmvolume.configMap | nindent 12 }}
+            name: {{ $cmvolume.name }}
+          name: volume-{{ $cmvolume.name }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.name }}
+          securityContext: {}
+          image: image-registry.openshift-image-registry.svc:5000/{{ .Values.namespace }}/{{ .Values.name }}:latest
+          imagePullPolicy: Always
+          ports:
+            {{- range $port := .Values.service }}
+            - name: "tcp-{{ $port.targetPort }}"
+              containerPort: {{ $port.targetPort }}
+              protocol: TCP
+            {{- end }}
+          #TODO
+          #env:
+          {{- if or .Values.configMapGlobal .Values.secretGlobal }}
+          envFrom:
+            {{- range $cmGlobal := .Values.configMapGlobal }}
+            - configMapRef:
+                name: {{ $cmGlobal }}
+            {{- end }}
+            {{- range $scGlobal := .Values.secretGlobal }}
+            - secretRef:
+                name: {{ $scGlobal }}
+            {{- end }}
+          {{- end }}
+          #TODO
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources: {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- if .Values.volumeConfigMap }}
+          volumeMounts:
+            {{- range $cmvolume := .Values.volumeConfigMap }}
+            - mountPath: {{ $cmvolume.mountPath }}
+              name: volume-{{ $cmvolume.name }}
+            {{- end }}
+          {{- end }}
