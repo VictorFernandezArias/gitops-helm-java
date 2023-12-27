@@ -31,15 +31,15 @@ route:
   # - host: dev-registro-clientes.cclh.io
   - port: 8080
     targetPort: 8080
-    name: flask01
+    # name: flask01
     path: '/hola-mundo'
 
 ##------- INCORPORAR CERTIFICADOS TLS en ROUTES -------##
 
 # Definición de construcción de imagen con codigo fuente.
 buildConfig:
-  image: python:3.9-ubi8 ## validar si retirar y dejar en template  (openjdk-11:1.18-2 o openjdk-17:1.2)
-  gitUrl: https://github.com/VictorFernandezArias/flask-contador
+  image: java:openjdk-17-ubi8 ## validar si retirar y dejar en template  (openjdk-11:1.18-2 o openjdk-17:1.2)
+  gitUrl: https://gitlab.com/vifernan/hello-spring-ocp.git
   ref: /
   branch: main
   ### Revisar secret que va a Git ###
