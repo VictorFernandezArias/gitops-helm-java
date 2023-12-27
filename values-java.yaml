@@ -1,6 +1,6 @@
 # Nombre de la aplicación, runtime (java, nodejs, wordpress) y la version del template
-name: flask01
-namespace: flask01
+name: java01
+namespace: java01
 # runtime: java
 # version: 1.0
 # Definición de pods, recursos asignados,y variables de entorno de la aplicación
@@ -29,10 +29,10 @@ service:
 # Por defecto se crea la route con definición default de openshift, y este apartado permite Definir de route adicionales como por ejemplo DNS.
 route:
   # - host: dev-registro-clientes.cclh.io
-    port: 8080
+  - port: 8080
     targetPort: 8080
     name: flask01
-    
+    path: '/hola-mundo'
 
 ##------- INCORPORAR CERTIFICADOS TLS en ROUTES -------##
 

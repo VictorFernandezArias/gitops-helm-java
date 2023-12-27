@@ -1,7 +1,7 @@
 # templates/route.yml
 # Validar si es necesario definir la route en el values.yml o cada service necesita tener una ruta? dentro de la definicion del service, puede especificarse el nombre de la ruta, y de existir ese valor, se creara la ruta  
-{{- if .Values.route }}
-{{- range $route := .Values.route }}
+{{- if .Values.service }}
+{{- range $service := .Values.service }}
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -10,14 +10,12 @@ metadata:
     openshift.io/host.generated: "true"
   labels:
     app: '{{ $.Values.name }}'
-  name: '{{ $.Values.name }}-{{ $route.port }}'
+  name: '{{ $.Values.name }}-{{ $service.port }}'
 spec:
-  # host: {{ printf "%s-%s.apps.ocp-noprod.cclh.int" $route.name $route.namespace }}
-  {{- if $route.path }}
-  path: {{ $route.path }}
-  {{- end }}
+  # host: {{ printf "%s-%s.apps.ocp-noprod.cclh.int" $service.name $service.namespace }}
+  
   port:
-    targetPort: {{ $route.targetPort }}
+    targetPort: {{ $service.port }}
   to:
     kind: Service
     name: {{ $.Values.name }}
