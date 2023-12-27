@@ -1,6 +1,6 @@
 # Nombre de la aplicación, runtime (java, nodejs, wordpress) y la version del template
 name: flask01
-namespace: flask01
+namespace: flask02
 # runtime: java
 # version: 1.0
 # Definición de pods, recursos asignados,y variables de entorno de la aplicación
