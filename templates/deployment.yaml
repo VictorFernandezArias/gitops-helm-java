@@ -11,7 +11,7 @@ spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      app:  {{ .Values.name }}
+      app:  {{ .Values.name }} 
       deployment: {{ .Values.name }}
   template:
     metadata:
@@ -20,15 +20,15 @@ spec:
         deployment: {{ .Values.name }}
     spec:
       {{- if .Values.volumeConfigMap }}
-      volumes:
-        {{- range $cmvolume := .Values.volumeConfigMap }}
-        - configMap:
-            defaultMode: 420
-            {{- toYaml $cmvolume.configMap | nindent 12 }}
-            name: {{ $cmvolume.name }}
-          name: volume-{{ $cmvolume.name }}
-        {{- end }}
-      {{- end }}
+      # volumes:
+      #   {{- range $cmvolume := .Values.volumeConfigMap }}
+      #   - configMap:
+      #       defaultMode: 420
+      #       {{- toYaml $cmvolume.configMap | nindent 12 }}
+      #       name: {{ $cmvolume.name }}
+      #     name: volume-{{ $cmvolume.name }}
+      #   {{- end }}
+      # {{- end }}
       containers:
         - name: {{ .Values.name }}
           securityContext: {}

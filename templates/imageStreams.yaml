@@ -1,0 +1,16 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+# spec:
+#   lookupPolicy:
+#     local: false
+#   tags:
+#     - name: {{ .Values.name }}
+#       from:
+#         kind: DockerImage
+#         name: >-
+#           image-registry.openshift-image-registry.svc:5000/{{ .Values.namespace }}/{{ .Values.name }}:latest
+

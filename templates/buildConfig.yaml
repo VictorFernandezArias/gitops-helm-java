@@ -1,0 +1,32 @@
+{{- if .Values.buildConfig.enabled }}
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  source:
+    git:
+      uri: {{ .Values.buildConfig.gitUrl }}
+      ref: {{ .Values.buildConfig.branch }}
+    contextDir: {{ .Values.buildConfig.ref }}
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: {{ .Values.buildConfig.image }}
+  ### Revisar secret que va a Git ###
+  # triggers:
+  #   - type: GitHub
+  #     github:
+  #       secret: {{ .Values.buildConfig.envSecret }}
+  output:
+    to:
+      kind: ImageStreamTag
+      name: "{{ .Values.name }}:latest"
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5    
+{{- end }}
