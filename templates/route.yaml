@@ -9,15 +9,15 @@ metadata:
   annotations:
     openshift.io/host.generated: "true"
   labels:
-    app: {{ .Values.name }}-{{ $service.port }}
-  name: {{ .Values.name }}-{{ $service.port }}
+    app: '{{ $.Values.name }}'
+  name: '{{ $.Values.name }}-{{ $service.port }}'
 spec:
   # host: {{ printf "%s-%s.apps.ocp-noprod.cclh.int" $service.name $service.namespace }}
   port:
     targetPort: {{ $service.port }}
   to:
     kind: Service
-    name: {{ .Values.name }}
+    name: {{ $.Values.name }}
     weight: 100
   wildcardPolicy: None
 {{- end }}
