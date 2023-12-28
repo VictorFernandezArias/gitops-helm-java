@@ -32,7 +32,7 @@ route:
   - targetPort: 8080
     name: java01
     path: '/hola-mundo'
-    host: java01.apps.cluster-kn55t.dynamic.redhatworkshops.io # si esta definido, agregar, si no apalancarse del name de route.
+    #host: java01.apps.cluster-kn55t.dynamic.redhatworkshops.io # si esta definido, agregar, si no apalancarse del name de route.
   # - targetPort: 8443
   #   name: java01-02
   #   path: '/hola-mundo'
