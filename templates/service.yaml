@@ -19,6 +19,7 @@ spec:
     {{- end }}
     {{- end }}
   selector:
+    app:  {{ .Values.name }}
     deployment: {{ .Values.name }}
   sessionAffinity: None
   type: ClusterIP

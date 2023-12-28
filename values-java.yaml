@@ -29,11 +29,14 @@ service:
 # Por defecto se crea la route con definición default de openshift, y este apartado permite Definir de route adicionales como por ejemplo DNS.
 route:
   # - host: dev-registro-clientes.cclh.io
-  - port: 8080
-    targetPort: 8080
-    # name: flask01
+  - targetPort: 8080
+    name: java01
     path: '/hola-mundo'
-
+    host: java01.apps.cluster-kn55t.dynamic.redhatworkshops.io # si esta definido, agregar, si no apalancarse del name de route.
+  # - targetPort: 8443
+  #   name: java01-02
+  #   path: '/hola-mundo'
+  #   host: 
 ##------- INCORPORAR CERTIFICADOS TLS en ROUTES -------##
 
 # Definición de construcción de imagen con codigo fuente.

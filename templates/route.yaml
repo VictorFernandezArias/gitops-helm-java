@@ -10,9 +10,11 @@ metadata:
     openshift.io/host.generated: "true"
   labels:
     app: '{{ $.Values.name }}'
-  name: '{{ $.Values.name }}-{{ $route.port }}'
+  name: '{{ $.Values.name }}'
 spec:
-  # host: {{ printf "%s-%s.apps.ocp-noprod.cclh.int" $route.name $route.namespace }}
+  {{- if $route.host }}
+  host: {{ $route.host }}
+  {{- end }}
   {{- if $route.path }}
   path: {{ $route.path }}
   {{- end }}
